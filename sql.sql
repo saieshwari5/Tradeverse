@@ -3,7 +3,6 @@ CREATE USER 'myuser'@'localhost' IDENTIFIED BY 'mypassword';
 GRANT ALL PRIVILEGES ON mydatabase.* TO 'myuser'@'localhost';
 FLUSH PRIVILEGES;
 
-use tradeverse;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
