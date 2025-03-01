@@ -29,19 +29,29 @@ def signup():
     
     return render_template("signup.html", form=form)
 
-
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
+    print("Login form accessed")  # Debug
+
     if form.validate_on_submit():
+        print("Form validated")  # Debug
         user = User.query.filter_by(email=form.email.data).first()
+
         if user and user.check_password(form.password.data):
+            print("User authenticated")  # Debug
             login_user(user)
             flash("Logged in successfully!", "success")
-            return redirect(url_for("dashboard"))  # Update this if needed
+
+            # Redirect to dashboard or homepage
+            return redirect(url_for("auth.dashboard"))  # Change to correct route
         else:
+            print("Invalid credentials")  # Debug
             flash("Invalid email or password", "danger")
+
+    print("Re-rendering login page")  # Debug
     return render_template("login.html", form=form)
+
 
 @auth.route("/logout")
 @login_required
@@ -49,3 +59,9 @@ def logout():
     logout_user()
     flash("You have been logged out.", "success")
     return redirect(url_for("auth.login"))
+
+
+@auth.route("/dashboard")
+@login_required
+def dashboard():
+    return "Welcome to your dashboard!"
