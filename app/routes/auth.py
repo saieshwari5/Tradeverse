@@ -17,12 +17,18 @@ def signup():
 
         new_user = User(username=form.username.data, email=form.email.data)
         new_user.set_password(form.password.data)
-        db.session.add(new_user)
-        db.session.commit()
 
-        flash("Account created successfully. You can now log in.", "success")
-        return redirect(url_for("auth.login"))
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash("Account created successfully!", "success")
+            return redirect(url_for("auth.login"))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error: {str(e)}", "danger")
+    
     return render_template("signup.html", form=form)
+
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():
