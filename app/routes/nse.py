@@ -7,6 +7,15 @@ from nselib import capital_market
 
 nse_bp = Blueprint("nse", __name__)
 
+def parse_value(value, dtype=float):
+    """Convert value to the given dtype, or return None if invalid."""
+    if isinstance(value, str) and value.strip() in ["-", ""]:
+        return None  # Handle missing values
+    try:
+        return dtype(value)
+    except ValueError:
+        return None
+
 @nse_bp.route("/fetch_bhavcopy", methods=["GET"])
 def fetch_bhavcopy():
     try:
@@ -21,6 +30,7 @@ def fetch_bhavcopy():
         data = capital_market.bhav_copy_with_delivery(trade_date=trade_date_str)
         df = pd.DataFrame(data)
 
+        entries_to_add = []
         for _, row in df.iterrows():
             existing_record = BhavCopy.query.filter_by(symbol=row["SYMBOL"], trade_date=trade_date).first()
             if existing_record:
@@ -30,23 +40,28 @@ def fetch_bhavcopy():
                 symbol=row["SYMBOL"],
                 series=row["SERIES"],
                 trade_date=trade_date,
-                prev_close=row["PREV_CLOSE"],
-                open_price=row["OPEN_PRICE"],
-                high=row["HIGH_PRICE"],
-                low=row["LOW_PRICE"],
-                last_price=row["LAST_PRICE"],
-                close_price=row["CLOSE_PRICE"],
-                avg_price=row["AVG_PRICE"],
-                volume=row["TTL_TRD_QNTY"],
-                turnover_lacs=row["TURNOVER_LACS"],
-                no_of_trades=row["NO_OF_TRADES"],
-                deliv_qty=None if row["DELIV_QTY"] == "-" else row["DELIV_QTY"],
-                deliv_per=None if row["DELIV_PER"] == "-" else row["DELIV_PER"],
+                prev_close=parse_value(row["PREV_CLOSE"], float),
+                open_price=parse_value(row["OPEN_PRICE"], float),
+                high=parse_value(row["HIGH_PRICE"], float),
+                low=parse_value(row["LOW_PRICE"], float),
+                last_price=parse_value(row["LAST_PRICE"], float),
+                close_price=parse_value(row["CLOSE_PRICE"], float),
+                avg_price=parse_value(row["AVG_PRICE"], float),
+                volume=parse_value(row["TTL_TRD_QNTY"], int),
+                turnover_lacs=parse_value(row["TURNOVER_LACS"], float),
+                no_of_trades=parse_value(row["NO_OF_TRADES"], int),
+                deliv_qty=parse_value(row["DELIV_QTY"], int),  # Fix for incorrect integer value
+                deliv_per=parse_value(row["DELIV_PER"], float),  # Fix for incorrect float value
             )
-            db.session.add(entry)
+            entries_to_add.append(entry)
 
-        db.session.commit()
+        # Add all new entries to the database in a single batch insert
+        if entries_to_add:
+            db.session.bulk_save_objects(entries_to_add)
+            db.session.commit()
+
         return jsonify({"message": "BhavCopy data updated successfully!"}), 200
 
     except Exception as e:
+        db.session.rollback()  # Rollback in case of error
         return jsonify({"error": str(e)}), 500
