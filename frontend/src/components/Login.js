@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./login.css"
 
 const Login = () => {
   const [user, setUser] = useState({ email: "", password: "" });
@@ -20,11 +21,20 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="email" placeholder="Email" onChange={handleChange} />
-      <input name="password" type="password" placeholder="Password" onChange={handleChange} />
-      <button type="submit">Login</button>
-    </form>
+    <div className="container">
+        <h1>Login</h1>
+        <form method="POST" action="{{ url_for('auth.login') }}">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required/>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required/>
+            
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{{ url_for('auth.signup') }}">Sign Up</a></p>
+    </div>
+
   );
 };
 
