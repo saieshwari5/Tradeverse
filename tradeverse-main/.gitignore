@@ -1,0 +1,4 @@
+.env
+tradeverse/
+__pycache__/
+frontend/node_modules/
