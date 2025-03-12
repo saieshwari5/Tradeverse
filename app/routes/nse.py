@@ -5,6 +5,7 @@ import pandas as pd
 import datetime
 from nselib import capital_market
 
+
 nse_bp = Blueprint("nse", __name__)
 
 def parse_value(value, dtype=float):
@@ -50,8 +51,6 @@ def fetch_bhavcopy():
                 volume=parse_value(row["TTL_TRD_QNTY"], int),
                 turnover_lacs=parse_value(row["TURNOVER_LACS"], float),
                 no_of_trades=parse_value(row["NO_OF_TRADES"], int),
-                deliv_qty=parse_value(row["DELIV_QTY"], int),  # Fix for incorrect integer value
-                deliv_per=parse_value(row["DELIV_PER"], float),  # Fix for incorrect float value
             )
             entries_to_add.append(entry)
 
@@ -59,9 +58,14 @@ def fetch_bhavcopy():
         if entries_to_add:
             db.session.bulk_save_objects(entries_to_add)
             db.session.commit()
+        
+        with open('./logs/cron_log.txt', 'a') as log_file:
+            log_file.write(f"[{datetime.datetime.now()}] BhavCopy data updated successfully!\n")
 
         return jsonify({"message": "BhavCopy data updated successfully!"}), 200
 
     except Exception as e:
         db.session.rollback()  # Rollback in case of error
+        with open('./logs/cron_log.txt', 'a') as log_file:
+            log_file.write(f"[{datetime.datetime.now()}] Error fetching data: {e}\n")
         return jsonify({"error": str(e)}), 500
