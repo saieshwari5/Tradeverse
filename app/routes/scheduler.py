@@ -13,7 +13,7 @@ def start_scheduler(app):
 
     scheduler.add_job(
         run_fetch_bhavcopy,
-        trigger=CronTrigger(minute="*"),
+        trigger=CronTrigger(hour=0, minute=1),
         replace_existing=True
     )
 
