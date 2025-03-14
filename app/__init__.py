@@ -13,6 +13,10 @@ def create_app():
     app = Flask(__name__, template_folder="templates", static_folder="static")
     app.config.from_object(Config)
 
+    
+    # Ensure session persists across redirects
+    app.config["SESSION_PERMANENT"] = False  
+
     # Initialize extensions
     db.init_app(app)
     bcrypt.init_app(app)
