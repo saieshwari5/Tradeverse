@@ -15,8 +15,6 @@ class BhavCopy(db.Model):
     volume = db.Column(db.Integer, nullable=False)
     turnover_lacs = db.Column(db.Float, nullable=False)
     no_of_trades = db.Column(db.Integer, nullable=False)
-    deliv_qty = db.Column(db.Integer, nullable=False)
-    deliv_per = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return f"<BhavCopy {self.symbol} - {self.trade_date}>"
