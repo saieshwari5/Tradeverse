@@ -4,7 +4,7 @@ from app.models import User, Transaction, Order, BhavCopy
 from app.utils import pseudo_stock_value
 from flask_login import current_user, login_required
 
-trading_bp = Blueprint("trading", __name__)
+buysell = Blueprint("trading", __name__)
 
 def get_stock_value(symbol):
     latest_data = BhavCopy.query.filter_by(symbol=symbol).order_by(BhavCopy.trade_date.desc()).first()
@@ -19,7 +19,7 @@ def get_stock_value(symbol):
         low_price=latest_data.low
     )
 
-@trading_bp.route("/buy", methods=["POST"])
+@buysell.route("/buy", methods=["POST"])
 @login_required
 def buy_stock():
     data = request.get_json()
@@ -59,7 +59,7 @@ def buy_stock():
     db.session.commit()
     return jsonify({"message": "Stock purchased successfully!"}), 200
 
-@trading_bp.route("/sell", methods=["POST"])
+@buysell.route("/sell", methods=["POST"])
 @login_required
 def sell_stock():
     data = request.get_json()
@@ -103,7 +103,7 @@ def sell_stock():
     db.session.commit()
     return jsonify({"message": "Stock sold successfully!"}), 200
 
-@trading_bp.route("/portfolio", methods=["GET"])
+@buysell.route("/portfolio", methods=["GET"])
 @login_required
 def view_portfolio():
     portfolio = {}
