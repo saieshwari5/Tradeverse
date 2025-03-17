@@ -24,15 +24,18 @@ const Login = () => {
     <div className="container">
         <h1>Login</h1>
         <form method="POST" action="{{ url_for('auth.login') }}">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required/>
+            {/* <label for="username">Username:</label> */}
+            <input name="username" placeholder="Username" onChange={handleChange} required/> 
+            {/* <input type="text" id="username" name="username" required/> */}
             
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required/>
+            {/* <label for="password">Password:</label> */}
+            <input name="password" type="password" placeholder="Password" onChange={handleChange} required/>
+            {/* <input type="password" id="password" name="password" required/> */}
             
             <button type="submit">Login</button>
         </form>
-        <p>Don't have an account? <a href="{{ url_for('auth.signup') }}">Sign Up</a></p>
+        <p>Don't have an account? <a href="/Signup">Sign Up</a></p>
+
     </div>
 
   );
