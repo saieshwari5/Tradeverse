@@ -1,52 +1,23 @@
-import React, { useState } from 'react'
-import Profiles from './profiles';
-import { Leaderboard } from './database';
+import React, { useContext } from 'react';
+import Profiles from './Profiles';
+import { LeaderboardContext } from '../store/leaderboard-data-store';
+import Heading from './heading';
 
 export default function Board() {
-
-    const [period, setPeriod] = useState(0);
-
-  const handleClick = (e) => {
-     
-    setPeriod(e.target.dataset.id)
-  }
+  const leaderboardData = useContext(LeaderboardContext); // Get data from context
 
   return (
     <div className="board">
-        <h1 className='leaderboard'>Leaderboard</h1>
+      <Heading/>
 
-        <div className="duration">
-            <button onClick={handleClick} data-id='7'>7 Days</button>
-            <button onClick={handleClick} data-id='30'>30 Days</button>
-            <button onClick={handleClick} data-id='0'>All-Time</button>
-        </div>
-
-        <Profiles Leaderboard={between(Leaderboard, period)}></Profiles>
-
+      <Profiles leaderboard={sortByNetWorth(leaderboardData)} />
     </div>
-  )
+  );
 }
 
-
-
-function between(data, between){
-    const today = new Date();
-    const previous = new Date(today);
-    previous.setDate(previous.getDate() - (between + 1));
-
-    let filter = data.filter(val => {
-        let userDate = new Date(val.dt);
-        if (between == 0) return val;
-        return previous <= userDate && today >= userDate;
-    })
-
-    // sort with asending order
-    return filter.sort((a, b) => {
-        if ( a.score === b.score){
-            return b.score - a.score;
-        } else{
-            return b.score - a.score;
-        }
-    })
-
+function sortByNetWorth(data) {
+  if (!data || data.length === 0) return [];
+  
+  // Sort by net worth in descending order
+  return data.sort((a, b) => b.net_worth - a.net_worth);
 }

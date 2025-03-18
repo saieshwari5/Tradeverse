@@ -1,11 +1,13 @@
-import Board from './components/board';
-import './components/style.css';
-
+import React from 'react';
+import { LeaderboardProvider } from './store/leaderboard-data-store';
+import Board from './components/Board';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'
 function App() {
   return (
-    <div className="App" id='main'>
-        <Board></Board>
-    </div>
+    <LeaderboardProvider>
+      <Board />
+    </LeaderboardProvider>
   );
 }
 
