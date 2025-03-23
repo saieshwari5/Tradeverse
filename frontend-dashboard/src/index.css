@@ -1,0 +1,73 @@
+/* Reset styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1E1E1E;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 60px; /* Adjust to match navbar height */
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 60px); /* Full height minus navbar */
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Sidebar links */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar ul li a {
+  color: #FFD700;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+  color: white;
+}
+
+/* Main content */
+.main-content {
+  margin-left: 260px; /* Adjust according to sidebar width */
+  margin-top: 70px; /* Adjust according to navbar height */
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Header text */
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
