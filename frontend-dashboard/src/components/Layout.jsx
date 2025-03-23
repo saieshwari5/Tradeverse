@@ -1,14 +1,14 @@
 import React from "react";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar"; 
 import Sidebar from "./Sidebar";
 
 const Layout = ({ children }) => {
   return (
-    <div className="layout">
-      <Navbar />
-      <div className="main-content">
+    <div>
+      <Navbar />  {/* ✅ Ensure Navbar is always present */}
+      <div style={{ display: "flex" }}>
         <Sidebar />
-        <div className="page-content">{children}</div>
+        <div className="content">{children}</div>
       </div>
     </div>
   );

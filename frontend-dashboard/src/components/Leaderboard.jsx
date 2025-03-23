@@ -52,71 +52,35 @@
 
 // export default Leaderboard;
 
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Leaderboard = () => {
-  const [leaders, setLeaders] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [leaderboard, setLeaderboard] = useState();
 
-  useEffect(() => {
-    fetchLeaderboard();
-  },);
+    // State to store data
+    useEffect(() => {
+        fetch("http://127.0.0.1:5000/api/leaderboard")  // Ensure backend URL is correct
+            .then(response => response.json())
+            .then(data => setLeaderboard(data))
+            .catch(error => console.error("Error fetching leaderboard:", error));
+    },);
 
-  const fetchLeaderboard = async () => {
-    setIsLoading(true);
-    try {
-      //  ✅ Replace with the actual API endpoint for leaderboard data
-      const response = await fetch("YOUR_API_ENDPOINT_FOR_LEADERBOARD");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setLeaders(data);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching leaderboard:", error);
-      setError(error);
-      setIsLoading(false);
-    }
-  };
-
-  if (isLoading) {
-    return <div>Loading leaderboard data...</div>;
-  }
-
-  if (error) {
-    return <div>Error fetching leaderboard: {error.message}</div>;
-  }
-
-  return (
-    <div>
-      <h2>Leaderboard</h2>
-      {leaders.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Username</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaders.map((leader) => (
-              <tr key={leader.id}>
-                <td>{leader.rank}</td>
-                <td>{leader.username}</td>
-                <td>{leader.score}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No leaderboard data available.</p>
-      )}
-    </div>
-  );
+    return (
+        <div>
+            <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
+            {leaderboard.length > 0 ? (
+                <ul>
+                    {leaderboard.map((entry, index) => (
+                        <li key={index}>
+                            <strong>#{entry.rank}</strong> {entry.username} - <span>${entry.virtual_balance}</span>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>Loading leaderboard...</p>
+            )}
+        </div>
+    );
 };
 
 export default Leaderboard;

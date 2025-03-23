@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_user, logout_user, login_required
-from app import db
-from app.models.user import User
+from app.models.user import User  # Import models before db
 from app.forms.auth_forms import SignupForm, LoginForm
+from app import db  # Import db after models
 
 auth = Blueprint("auth", __name__)
 
@@ -13,7 +13,6 @@ def signup():
         existing_email = User.query.filter_by(email=form.email.data).first()
         existing_username = User.query.filter_by(username=form.username.data).first()
 
-        # Check if email or username already exists
         if existing_email:
             flash("Email already exists. Please log in.", "danger")
             return redirect(url_for("auth.signup"))
@@ -22,12 +21,10 @@ def signup():
             flash("Username already taken. Please choose another.", "danger")
             return redirect(url_for("auth.signup"))
 
-        # Check if passwords match
         if form.password.data != form.confirm_password.data:
             flash("Passwords do not match. Please try again.", "danger")
             return redirect(url_for("auth.signup"))
 
-        # Create new user
         new_user = User(username=form.username.data, email=form.email.data)
         new_user.set_password(form.password.data)
 
@@ -41,7 +38,6 @@ def signup():
             flash(f"Error: {str(e)}", "danger")
 
     return render_template("signup.html", form=form)
-
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():

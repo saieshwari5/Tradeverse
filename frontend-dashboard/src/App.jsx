@@ -195,26 +195,26 @@
 // };
 
 // export default App;
-
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Dashboard from "./components/Dashboard";
 import Portfolio from "./pages/Portfolio";
-import OrdersPage from "./pages/OrderPage"; //  ✅ Corrected import name
+import OrdersPage from "./pages/OrderPage";
 import Profile from "./pages/Profile";
-import LeaderboardPage from "./pages/LeaderboardPage"; //  ✅ Corrected import name
+import LeaderboardPage from "./pages/LeaderboardPage";
 
 const App = () => {
   return (
     <Router>
       <Layout>
         <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" />} />  {/* ✅ Default Route */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/orders" element={<OrdersPage />} />  {/* ✅ Corrected Route */}
+          <Route path="/orders" element={<OrdersPage />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/leaderboard" element={<LeaderboardPage />} />  {/* ✅ Corrected Route */}
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
         </Routes>
       </Layout>
     </Router>
