@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 const Layout = ({ children }) => {
   return (
     <div>
-      <Navbar />  {/* ✅ Ensure Navbar is always present */}
+      <Navbar />  
       <div style={{ display: "flex" }}>
         <Sidebar />
         <div className="content">{children}</div>

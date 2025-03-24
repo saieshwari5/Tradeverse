@@ -1,0 +1,33 @@
+/* src/styles/Leaderboard.css */
+.leaderboard-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.leaderboard-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.leaderboard-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard-container th,
+.leaderboard-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.leaderboard-container th {
+    background-color: #f2f2f2;
+}
+
+.leaderboard-container {
+  
+    border: 1px solid #ccc;
+    padding: 10px;
+}
