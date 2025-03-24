@@ -1,8 +1,10 @@
+from app import bcrypt
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_user, logout_user, login_required
 from app.models.user import User  # Import models before db
 from app.forms.auth_forms import SignupForm, LoginForm
 from app import db  # Import db after models
+from flask import make_response
 
 auth = Blueprint("auth", __name__)
 
@@ -39,21 +41,40 @@ def signup():
 
     return render_template("signup.html", form=form)
 
-@auth.route("/login", methods=["GET", "POST"])
+# @auth.route("/login", methods=["GET", "POST"])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(email=form.email.data).first()
+
+#         if user and user.check_password(form.password.data):
+#             login_user(user)
+#             flash("Logged in successfully!", "success")
+#             return redirect(url_for("auth.dashboard"))  # Change this if needed
+#         else:
+#             flash("Invalid email or password", "danger")
+
+#     return render_template("login.html", form=form)
+#---------------------------------------------------------
+
+
+@auth.route("/login", methods=["POST"])  # ✅ Ensure POST is allowed
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid JSON"}), 400
+    
+    username = data.get("username")
+    password = data.get("password")
 
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash("Logged in successfully!", "success")
-            return redirect(url_for("auth.dashboard"))  # Change this if needed
-        else:
-            flash("Invalid email or password", "danger")
+    user = User.query.filter_by(username=username).first()
+    if user and bcrypt.check_password_hash(user.password_hash, password):
+        login_user(user, remember=True)
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        return jsonify({"error": "Invalid credentials"}), 401
 
-    return render_template("login.html", form=form)
-
+#---------------------------------------------------------
 
 @auth.route("/logout")
 @login_required

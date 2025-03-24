@@ -59,7 +59,7 @@ const Leaderboard = () => {
 
     // State to store data
     useEffect(() => {
-        fetch("http://127.0.0.1:5000/api/leaderboard")  // Ensure backend URL is correct
+        fetch("http://127.0.0.1:5000/leaderboard")  // Ensure backend URL is correct
             .then(response => response.json())
             .then(data => setLeaderboard(data))
             .catch(error => console.error("Error fetching leaderboard:", error));
