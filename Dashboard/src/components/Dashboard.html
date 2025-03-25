@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">Sidebar</aside>
+        <div class="main-content">
+            <nav class="navbar">Navbar</nav>
+            <div class="dashboard-content">
+                <div id="loading">Loading portfolio progress...</div>
+                <div id="error" style="color: red; display: none;"></div>
+                <div class="card portfolio-chart-card" id="chart-container" style="display: none;">
+                    <h3>Portfolio Value Over Time</h3>
+                    <div id="portfolioChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("/api/portfolio_progress")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("loading").style.display = "none";
+                    if (data.length > 0) {
+                        document.getElementById("chart-container").style.display = "block";
+                        Highcharts.chart("portfolioChart", {
+                            chart: { type: "line" },
+                            title: { text: "Portfolio Value Over Time" },
+                            xAxis: { categories: data.map(item => item.date) },
+                            yAxis: { title: { text: "Portfolio Value" } },
+                            series: [{ name: "Portfolio", data: data.map(item => item.value) }],
+                        });
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("error").textContent = `Error fetching portfolio progress: ${error.message}`;
+                    document.getElementById("error").style.display = "block";
+                });
+        });
+    </script>
+</body>
+</html>
