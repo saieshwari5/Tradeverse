@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Progress</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>📈 Portfolio Progress</h2>
+    <canvas id="portfolioChart"></canvas>
+    <div id="loading">Loading portfolio data...</div>
+    <div id="error" style="color: red; display: none;"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("YOUR_API_ENDPOINT_FOR_PORTFOLIO")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("loading").style.display = "none";
+                    if (data.length > 0) {
+                        const ctx = document.getElementById("portfolioChart").getContext("2d");
+                        new Chart(ctx, {
+                            type: "line",
+                            data: {
+                                labels: data.map(item => item.date),
+                                datasets: [{
+                                    label: "Portfolio Value",
+                                    data: data.map(item => item.value),
+                                    borderColor: "#82ca9d",
+                                    fill: false
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    x: { title: { display: true, text: "Date" } },
+                                    y: { title: { display: true, text: "Value" } }
+                                }
+                            }
+                        });
+                    } else {
+                        document.body.insertAdjacentHTML("beforeend", "<p>No portfolio data found.</p>");
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("error").textContent = `Error fetching data: ${error.message}`;
+                    document.getElementById("error").style.display = "block";
+                });
+        });
+    </script>
+</body>
+</html>

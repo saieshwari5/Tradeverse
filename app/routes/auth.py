@@ -56,20 +56,18 @@ def signup():
 
 #     return render_template("login.html", form=form)
 #---------------------------------------------------------
-
-
-@auth.route("/login", methods=["POST"])  # ✅ Ensure POST is allowed
+@auth.route("/login", methods=["POST"])
 def login():
+    print("📌 Received Login Request:", request.method)  # Debugging
     data = request.get_json()
-    if not data:
-        return jsonify({"error": "Invalid JSON"}), 400
-    
-    username = data.get("username")
-    password = data.get("password")
 
-    user = User.query.filter_by(username=username).first()
-    if user and bcrypt.check_password_hash(user.password_hash, password):
-        login_user(user, remember=True)
+    if not data or "email" not in data or "password" not in data:
+        return jsonify({"error": "Missing credentials"}), 400
+
+    user = User.query.filter_by(email=data["email"]).first()
+
+    if user and bcrypt.check_password_hash(user.password_hash, data["password"]):  # ✅ Change `user.password` to `user.password_hash`
+        login_user(user)
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"error": "Invalid credentials"}), 401

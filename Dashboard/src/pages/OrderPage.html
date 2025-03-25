@@ -1,0 +1,63 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Orders</h2>
+    <div id="orders">Loading orders...</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("YOUR_API_ENDPOINT_FOR_ORDERS")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const ordersDiv = document.getElementById("orders");
+                    ordersDiv.innerHTML = "";
+                    if (data.length > 0) {
+                        const table = document.createElement("table");
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Stock Type</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.map(order => `
+                                    <tr>
+                                        <td>${order.stockType}</td>
+                                        <td>${order.quantity}</td>
+                                        <td>${order.price}</td>
+                                        <td>${order.status}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        `;
+                        ordersDiv.appendChild(table);
+                    } else {
+                        ordersDiv.textContent = "No orders found.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("orders").textContent = "Error fetching orders.";
+                    console.error("Error fetching orders:", error);
+                });
+        });
+    </script>
+</body>
+</html> -->
+
+
+<h1>📜 Orders</h1>
+<p>Check your stock trading history.</p>

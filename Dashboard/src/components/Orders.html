@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Orders</h2>
+    <div id="loading">Loading orders...</div>
+    <div id="error" style="color: red; display: none;"></div>
+    <table id="ordersTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Stock Type</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("YOUR_API_ENDPOINT_FOR_ORDERS")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("loading").style.display = "none";
+                    if (data.length > 0) {
+                        document.getElementById("ordersTable").style.display = "table";
+                        const ordersBody = document.getElementById("ordersBody");
+                        data.forEach(order => {
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                <td>${order.stockType}</td>
+                                <td>${order.quantity}</td>
+                                <td>${order.price}</td>
+                                <td>${order.status}</td>
+                            `;
+                            ordersBody.appendChild(row);
+                        });
+                    } else {
+                        document.body.insertAdjacentHTML("beforeend", "<p>No orders found.</p>");
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("error").textContent = `Error fetching orders: ${error.message}`;
+                    document.getElementById("error").style.display = "block";
+                });
+        });
+    </script>
+</body>
+</html>

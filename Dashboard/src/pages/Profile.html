@@ -1,0 +1,38 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Profile</h1>
+    <div id="loading">Loading...</div>
+    <div id="profile" style="display: none;">
+        <p><strong>Username:</strong> <span id="username"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Balance:</strong> $<span id="balance"></span></p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:5000/api/profile", { credentials: "include" })
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("profile").style.display = "block";
+                    document.getElementById("username").textContent = user.username;
+                    document.getElementById("email").textContent = user.email;
+                    document.getElementById("balance").textContent = user.balance.toFixed(2);
+                })
+                .catch(() => {
+                    document.getElementById("loading").textContent = "Failed to load profile.";
+                });
+        });
+    </script>
+</body>
+</html> -->
+
+
+<h1>👤 Profile</h1>
+<p>Manage your personal information and account settings.</p>

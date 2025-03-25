@@ -19,3 +19,10 @@ class Config:
         f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+    SESSION_TYPE = "filesystem"   # Required for Flask-Login to work
+    SESSION_PERMANENT = False
+    SESSION_USE_SIGNER = True
+    SESSION_FILE_DIR = "./flask_session"  # Store session files here
+    SESSION_COOKIE_NAME = "tradeverse_session"
