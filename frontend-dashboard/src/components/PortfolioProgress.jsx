@@ -1,56 +1,152 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import React from 'react';
+// import { Line } from 'react-chartjs-2';
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// } from 'chart.js';
+
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// );
+
+// const PortfolioProgress = ({ portfolioData }) => {
+//   const chartData = {
+//     labels: portfolioData?.map(item => item.date) || [],
+//     datasets: [
+//       {
+//         label: 'Portfolio Value',
+//         data: portfolioData?.map(item => item.value) || [],
+//         borderColor: 'rgb(75, 192, 192)',
+//         backgroundColor: 'rgba(75, 192, 192, 0.2)',
+//         tension: 0.1,
+//         fill: true
+//       }
+//     ]
+//   };
+
+//   const options = {
+//     responsive: true,
+//     plugins: {
+//       legend: {
+//         position: 'top',
+//       },
+//       title: {
+//         display: true,
+//         text: 'Portfolio Value Over Time'
+//       }
+//     },
+//     scales: {
+//       y: {
+//         beginAtZero: false
+//       }
+//     }
+//   };
+
+//   return (
+//     <div className="portfolio-progress">
+//       <h2>Portfolio Performance</h2>
+//       {portfolioData?.length > 0 ? (
+//         <Line data={chartData} options={options} />
+//       ) : (
+//         <p>Loading portfolio data...</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default PortfolioProgress;
+
+
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
   Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
+  Legend
+} from 'chart.js';
 
-const PortfolioProgress = () => {
-  const [portfolioData, setPortfolioData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-  useEffect(() => {
-    const fetchPortfolioData = async () => {
-      try {
-        // Make sure your Flask backend is running and CORS is enabled
-        const response = await axios.get(
-          "http://127.0.0.1:5000/api/portfolio_progress",
-          { withCredentials: true }
-        );
-        setPortfolioData(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching portfolio progress:", err);
-        setError(err);
-        setLoading(false);
+const PortfolioProgress = ({ portfolioData }) => {
+  // Ensure data is in correct format
+  const formattedData = portfolioData?.map(item => ({
+    date: new Date(item.date).toLocaleDateString(),
+    value: item.value
+  })) || [];
+
+  const chartData = {
+    labels: formattedData.map(item => item.date),
+    datasets: [
+      {
+        label: 'Portfolio Value ($)',
+        data: formattedData.map(item => item.value),
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        tension: 0.1,
+        fill: true
       }
-    };
+    ]
+  };
 
-    fetchPortfolioData();
-  }, []);
-
-  if (loading) return <div>Loading portfolio progress...</div>;
-  if (error)
-    return <div style={{ color: "red" }}>Error: {error.message}</div>;
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Portfolio Value Over Time'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => `$${context.parsed.y.toFixed(2)}`
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: false,
+        ticks: {
+          callback: (value) => `$${value}`
+        }
+      }
+    }
+  };
 
   return (
-    <div className="portfolio-progress">
-      <h2>Portfolio Progress</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={portfolioData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="bg-white p-4 rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-4">Portfolio Performance</h2>
+      {portfolioData?.length > 0 ? (
+        <Line data={chartData} options={options} />
+      ) : (
+        <p className="text-gray-500">No portfolio progress data available</p>
+      )}
     </div>
   );
 };

@@ -40,20 +40,23 @@
 
     <script>
         $(document).ready(function () {
-            // Check Username Availability
+            // Check Username Availability using fetch
             $("#username").on("input", function () {
                 let username = $(this).val().trim();
                 if (username.length > 2) {
-                    $.ajax({
-                        url: "{{ url_for('auth.check_username') }}",
-                        type: "GET",
-                        data: { username: username },
-                        success: function (data) {
-                            $("#username_status").text(data.message).css("color", data.color);
+                    fetch("/auth/check_username", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
                         },
-                        error: function () {
-                            $("#username_status").text("Error checking username").css("color", "red");
-                        }
+                        body: JSON.stringify({username: username})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        $("#username_status").text(data.message).css("color", data.color);
+                    })
+                    .catch(() => {
+                        $("#username_status").text("Error checking username").css("color", "red");
                     });
                 } else {
                     $("#username_status").text("");
@@ -61,22 +64,16 @@
             });
     
             // Check Email Availability
-            $("#email").on("input", function () {
+            $("#email").on("input", function() {
                 let email = $(this).val().trim();
-                if (email.length > 5) {
+                if(email.length > 5) {
                     $.ajax({
                         url: "{{ url_for('auth.check_email') }}",
-                        type: "GET",
                         data: { email: email },
-                        success: function (data) {
+                        success: function(data) {
                             $("#email_status").text(data.message).css("color", data.color);
-                        },
-                        error: function () {
-                            $("#email_status").text("Error checking email").css("color", "red");
                         }
                     });
-                } else {
-                    $("#email_status").text("");
                 }
             });
     
@@ -96,5 +93,4 @@
             });
         });
     </script>
-    
 {% endblock %}

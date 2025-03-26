@@ -91,21 +91,19 @@
 // };
 
 // export default Dashboard;
-
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import PortfolioProgress from "../components/PortfolioProgress";
 
-const Dashboard = () => {
+const Dashboard = ({ portfolioData }) => {
   return (
     <div className="dashboard-container">
       <Sidebar />
       <div className="main-content">
         <Navbar />
         <div className="dashboard-content">
-          {/* Render the portfolio progress chart */}
-          <PortfolioProgress />
+          <PortfolioProgress portfolioData={portfolioData} />
         </div>
       </div>
     </div>
@@ -113,4 +111,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
