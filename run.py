@@ -10,7 +10,7 @@
 #     start_scheduler(app)  # Pass app instance here
 #     app.run(debug=True)
 
-
+from flask_migrate import upgrade
 from app import create_app
 
 app = create_app()

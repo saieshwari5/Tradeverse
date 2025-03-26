@@ -1,31 +1,19 @@
 
-import React from "react";
-import { Link } from "react-router-dom";   
-import "./Sidebar.css";
+import { Link } from "react-router-dom";
 
-const Sidebar = () => {
+function Sidebar() {
   return (
-    <div className="sidebar">
-      <h2>Tradeverse</h2>
-      <ul>
-        <li>
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
-        <li>
-          <Link to="/portfolio">Portfolio</Link>  
-        </li>
-        <li>
-          <Link to="/orders">Orders</Link>  
-        </li>
-        <li>
-          <Link to="/profile">Profile</Link> 
-        </li>
-        <li>
-          <Link to="/leaderboard">Leaderboard</Link>  
-        </li>
-      </ul>
+    <div className="w-64 bg-white shadow-md p-4">
+      <h2 className="text-xl font-bold mb-4">Dashboard</h2>
+      <nav>
+        <ul>
+          <li className="mb-2">
+            <Link to="/portfolio" className="text-blue-500 hover:underline">Portfolio</Link>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
-};
+}
 
 export default Sidebar;

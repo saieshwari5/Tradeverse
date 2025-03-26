@@ -1,103 +1,68 @@
-/* Reset styles */
-* {
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Navbar */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #1E1E1E;
-  color: white;
-  padding: 15px 30px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 20px;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 60px; /* Adjust to match navbar height */
-  left: 0;
-  width: 250px;
-  height: calc(100vh - 60px); /* Full height minus navbar */
-  background-color: #222;
-  color: white;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-/* Sidebar links */
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar ul li {
-  margin: 15px 0;
-}
-
-.sidebar ul li a {
-  color: #FFD700;
-  text-decoration: none;
-  font-size: 18px;
-}
-
-.sidebar ul li a:hover {
-  color: white;
-}
-
-/* Main content */
-.main-content {
-  margin-left: 260px; /* Adjust according to sidebar width */
-  margin-top: 70px; /* Adjust according to navbar height */
-  padding: 20px;
-  min-height: 100vh;
-  background-color: #f8f9fa;
-}
-
-/* Header text */
-.header {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-}
-
-
-.dashboard-container {
-  display: flex;
+  place-items: center;
+  min-width: 320px;
   min-height: 100vh;
 }
 
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
-.dashboard-content {
-  padding: 20px;
-  flex: 1;
-  background-color: #f5f5f5;
-}
-
-.portfolio-progress {
-  background: white;
-  padding: 20px;
+button {
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
-.portfolio-progress h2 {
-  margin-bottom: 20px;
-  color: #333;
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
 }
