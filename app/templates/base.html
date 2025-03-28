@@ -1,51 +1,82 @@
-<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{% block title %}My Website{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradeverse - {% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .flash-messages {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 60px;
         }
-        .flash-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            color: #fff;
+            display: block;
         }
-        .flash-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .sidebar a:hover {
+            background-color: #495057;
         }
-        .flash-warning {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            padding-top: 60px;
         }
-        .flash-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+        .navbar {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-messages flash-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('main.dashboard') }}">Tradeverse</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Sidebar -->
+    {% if current_user.is_authenticated %}
+    <div class="sidebar">
+        <a href="{{ url_for('main.dashboard') }}"><i class="fas fa-chart-line me-2"></i>Dashboard</a>
+        <a href="{{ url_for('main.portfolio') }}"><i class="fas fa-briefcase me-2"></i>Portfolio</a>
+        <a href="{{ url_for('main.orders') }}"><i class="fas fa-shopping-cart me-2"></i>Orders</a>
+        <a href="{{ url_for('main.transactions') }}"><i class="fas fa-exchange-alt me-2"></i>Transactions</a>
+        <a href="{{ url_for('main.leaderboard') }}"><i class="fas fa-trophy me-2"></i>Leaderboard</a>
+        <a href="{{ url_for('main.profile') }}"><i class="fas fa-user me-2"></i>Profile</a>
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="{% if current_user.is_authenticated %}main-content{% else %}container mt-5{% endif %}">
         {% block content %}{% endblock %}
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

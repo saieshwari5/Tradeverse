@@ -1,34 +1,18 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Portfolio from "./pages/Portfolio";
-// import Sidebar from "./components/Sidebar";
-
-// function App() {
-//   return (
-//     <Router>
-//       <div className="flex h-screen">
-//         <Sidebar />
-//         <div className="flex-1 p-6 bg-gray-100">
-//           <Routes>
-//             <Route path="/portfolio" element={<Portfolio />} />
-//           </Routes>
-//         </div>
-//       </div>
-//     </Router>
-//   );
-// }
-
-// export default App;*/
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PortfolioChart from "./components/PortfolioChart";
-
-
+import Dashboard from './pages/Dashboard';
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<PortfolioChart />} />
+                <Route path='/' element={<Login />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/signup' element={<Signup />} />
+                <Route path='/dashboard' element={<Dashboard />} />
             </Routes>
         </Router>
     );

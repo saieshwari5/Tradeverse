@@ -1,4 +1,4 @@
-from app import db
+from .. import db  # Change from 'from app import db'
 
 class BhavCopy(db.Model):
     id = db.Column(db.Integer, primary_key=True)

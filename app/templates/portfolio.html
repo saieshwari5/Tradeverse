@@ -1,52 +1,177 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Progress</title>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .container { max-width: 800px; margin: auto; padding: 20px; }
-        #portfolioChart { height: 500px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>My Portfolio Progress</h2>
-        <div id="portfolioChart"></div>
+{% extends "base.html" %}
+
+{% block title %}Portfolio{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Portfolio Summary -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Value</h5>
+                    <h3 class="card-text">₹100,000</h3>
+                    <p class="text-success">+2.5% today</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Invested Amount</h5>
+                    <h3 class="card-text">₹95,000</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Current Returns</h5>
+                    <h3 class="card-text text-success">₹5,000</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Holdings</h5>
+                    <h3 class="card-text">8</h3>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        async function fetchPortfolioData() {
-            try {
-                const response = await fetch("/portfolio/progress/portfolio_progress");  // Corrected API endpoint
-                const data = await response.json();
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Portfolio Performance</h5>
+                    <div id="performanceChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Asset Allocation</h5>
+                    <div id="allocationPie" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                if (data.status === "success") {
-                    const dates = data.data.map(d => d.date);
-                    const values = data.data.map(d => d.value);
+    <!-- Holdings Table -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Current Holdings</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Stock</th>
+                            <th>Quantity</th>
+                            <th>Avg Price</th>
+                            <th>Current Price</th>
+                            <th>Current Value</th>
+                            <th>P&L</th>
+                            <th>Change %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TCS</td>
+                            <td>10</td>
+                            <td>₹3,500</td>
+                            <td>₹3,600</td>
+                            <td>₹36,000</td>
+                            <td class="text-success">₹1,000</td>
+                            <td class="text-success">+2.85%</td>
+                        </tr>
+                        <tr>
+                            <td>Infosys</td>
+                            <td>15</td>
+                            <td>₹1,500</td>
+                            <td>₹1,450</td>
+                            <td>₹21,750</td>
+                            <td class="text-danger">-₹750</td>
+                            <td class="text-danger">-3.33%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    Highcharts.chart('portfolioChart', {
-                        chart: { type: 'line' },
-                        title: { text: 'Portfolio Growth Over Time' },
-                        xAxis: { categories: dates, title: { text: 'Date' } },
-                        yAxis: { title: { text: 'Portfolio Value' } },
-                        series: [{
-                            name: 'Total Value',
-                            data: values,
-                            color: '#007bff'
-                        }]
-                    });
-                } else {
-                    alert("Error fetching portfolio data.");
-                }
-            } catch (error) {
-                console.error("Error:", error);
+<!-- Highcharts -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<script>
+    // Performance Chart
+    Highcharts.chart('performanceChart', {
+        chart: {
+            type: 'area'
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+            title: {
+                text: 'Portfolio Value (₹)'
             }
-        }
+        },
+        series: [{
+            name: 'Portfolio Value',
+            data: [95000, 96000, 94500, 98000, 99500, 97000, 98500, 100000, 101500, 100000, 102000, 105000],
+            fillColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops: [
+                    [0, Highcharts.color('#0d6efd').setOpacity(0.5).get('rgba')],
+                    [1, Highcharts.color('#0d6efd').setOpacity(0).get('rgba')]
+                ]
+            }
+        }]
+    });
 
-        fetchPortfolioData();
-    </script>
-</body>
-</html>
+    // Asset Allocation Pie Chart
+    Highcharts.chart('allocationPie', {
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            name: 'Allocation',
+            data: [
+                { name: 'IT', y: 45.0 },
+                { name: 'Banking', y: 25.0 },
+                { name: 'Pharma', y: 15.0 },
+                { name: 'Auto', y: 10.0 },
+                { name: 'Others', y: 5.0 }
+            ]
+        }]
+    });
+</script>
+{% endblock %}

@@ -9,14 +9,16 @@ body {
     margin: 0;
 }
 
-.container {
+.auth-container {
+    max-width: 400px;
     background-color: #ffffff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
     text-align: center;
+    margin: auto;
 }
+
 
 h2 {
     margin-bottom: 20px;

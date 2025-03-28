@@ -1,14 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-#keep all the models defined together 
-# whenver defining new model, put it here
+from .. import db
 from .user import User
 from .bhavcopy import BhavCopy
-from .transaction import Transaction
-from .holding import Holding
-from .order import Order
-from .portfolio import Portfolio, Transaction 
 
-
-__all__ = ['User', 'Portfolio', 'Transaction', 'Leaderboard', 'BhavCopy']
+__all__ = ['User', 'BhavCopy']
